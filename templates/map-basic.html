@@ -1,0 +1,33 @@
+<!-- can probably delete this one now -->
+
+{% extends 'base.html' %}
+
+{% block head %}
+  <link rel="stylesheet" href="/static/css/maps.css"/>
+  <script src="/static/js/maps.js"></script>
+
+{% endblock %}
+
+{% block body %}
+  <header>
+    <nav>
+      <section id="links-right">
+        <a href="/">home</a>
+      </section>
+    </nav>
+  </header>
+
+  <h2>Farms</h2>
+
+  <p>List of farms
+  <div id="farm-text"></div>
+  </p>
+
+
+  <main>
+    <section class="map">
+      <div id="map"></div>
+    </section>
+  </main>
+
+{% endblock %}

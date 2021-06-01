@@ -1,0 +1,141 @@
+
+        var OpenStreetMap = function () {
+            this.name = 'openstreetmap';
+        };
+
+        OpenStreetMap.prototype = {
+            events: {
+                REFRESH_DISTANCE_SELECT: 'refresh_distance_select',
+                REFRESH_SEARCH_DATA: 'refresh_search_data',
+                REFRESH_MAP: 'refresh_map',
+                CENTER_MAP: 'center_map',
+                ZOOM_MAP: 'zoom_map',
+                CENTER_AND_ZOOM_MAP: 'center_and_zoom_map',
+                RESIZE_MAP: 'resize_map',
+                REFRESH_CIRCLE: 'refresh_circle',
+                REFRESH_CLUSTER: 'refresh_cluster',
+                REMOVE_CLUSTER: 'remove_cluster',
+                CHANGE_STATIC_MARKER_ICON: 'change_static_marker_icon',
+                SHOW_REFRESH_SEARCH_BUTTON: 'show_refresh_search_button',
+                SHOW_ON_MAP: 'show_on_map',
+                SCROLL_TO_MAP: 'scroll_to_map'
+            },
+            mapEvents: [],
+            trackingCallback: null,
+            controls: {},
+                                    langtextData: {},
+            optionsData: {},
+            centerData: {},
+            mapCenter: null,
+            map: null,
+
+            
+            
+            
+            
+                                    subscribeMapEvent: function (type, callback) {
+                var self = this;
+
+                if (type && !self.mapEvents.hasOwnProperty(type) && callback) {
+                    self.mapEvents[type] = callback;
+                }
+            },
+            publishMapEvent: function (type, data) {
+                var self = this;
+
+                if (type && self.mapEvents.hasOwnProperty(type) && typeof self.mapEvents[type] === 'function') {
+                    if (data) {
+                        self.mapEvents[type](data);
+                    } else {
+                        self.mapEvents[type]();
+                    }
+                }
+            },
+            setTrackingCallback: function (callback) {
+                var self = this;
+
+                if (callback) {
+                    self.trackingCallback = callback;
+                }
+            },
+            initControls: function () {
+                            },
+                        createMarkerImage: function (iconUrl) {
+                return L.icon({
+                    iconUrl: iconUrl,
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [0, -40]
+                });
+            },
+            init: function () {
+                
+                var self = this;
+
+                self.langtextData = Object.assign({}, {"label_found_in_radius_no_count":"##NUM## results found within a ##RADIUS## km radius","label_found_in_radius":"##PAGEMAX## results (of a total of ##NUM##) displayed within a ##RADIUS## km radius","label_found":"##PAGEMAX## results (of a total of ##NUM##) displayed"});
+                self.optionsData = Object.assign({}, {"minZoom":6,"maxZoom":9,"zoom":9,"dragging":true,"doubleClickZoom":true,"scrollWheelZoom":true,"gestureOrTouchZoom":true});
+                self.centerData = Object.assign({}, {"lat":"34.439430100000","lng":"-110.170041000000"});
+                self.mapCenter = [parseFloat(self.centerData.lat), parseFloat(self.centerData.lng)];
+
+                var tileLayerMap = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png?lang=en', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                });
+
+                var mapOptions = {
+                    minZoom: self.optionsData.minZoom,
+                    maxZoom: self.optionsData.maxZoom,
+                    zoom: self.optionsData.zoom,
+                    center: self.mapCenter,
+                    dragging: self.optionsData.dragging,
+                    doubleClickZoom: self.optionsData.doubleClickZoom,
+                    scrollWheelZoom: self.optionsData.scrollWheelZoom,
+                    touchZoom: self.optionsData.gestureOrTouchZoom,
+                    layers: [tileLayerMap]
+                };
+
+                self.map = L.map('openstreetmap-1621289029', mapOptions);
+
+                
+                
+                
+                
+                
+                
+                self.subscribeMapEvent(self.events.CENTER_MAP, function (data) {
+                    if (data && data.hasOwnProperty('center')) {
+                        self.map.setView(data.center);
+                    }
+                });
+
+                self.subscribeMapEvent(self.events.ZOOM_MAP, function (data) {
+                    if (data && data.hasOwnProperty('zoom')) {
+                        self.map.setZoom(data.zoom);
+                    }
+                });
+
+                self.subscribeMapEvent(self.events.CENTER_AND_ZOOM_MAP, function (data) {
+                    if (data && data.hasOwnProperty('center') && data.hasOwnProperty('zoom')) {
+                        self.map.setView(data.center, data.zoom);
+                    }
+                });
+
+                self.subscribeMapEvent(self.events.RESIZE_MAP, function () {
+                    self.map.invalidateSize(true);
+                });
+
+                self.subscribeMapEvent(self.events.SCROLL_TO_MAP, function () {
+                    $('html, body').animate({scrollTop: $('#openstreetmap-1621289029').position().top + 50}, 300);
+                });
+
+                self.initControls();
+
+                
+                            },
+
+            
+            
+            
+            
+            
+                    };
+    
