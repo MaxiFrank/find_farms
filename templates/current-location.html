@@ -3,7 +3,10 @@
 {% block head %}
   <link rel="stylesheet" href="/static/css/maps.css"/>
   <script src="/static/js/maps.js"></script>
-
+  <script
+    defer
+    src='https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_KEY }}&callback=initMap'>
+  </script>
   <script defer src="/static/js/showfarms.js"></script>
   <script src="/static/lib/babel-standalone.js"></script>
   <script src="/static/lib/react.development.js"></script>
@@ -13,7 +16,6 @@
 {% block title %}Put Address{% endblock %}
 
 {% block body %}
-
     <header>
         <nav>
           <section id="links-right">
@@ -87,8 +89,6 @@
     <div id="root"></div>
     <!-- <div class="result"> </div> -->
 
-   
-    
     <script src="/static/js/bookmark.jsx" type="text/jsx"></script>
 
 

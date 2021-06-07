@@ -1,3 +1,4 @@
+
 function updateFarms(results) {
     // console.log('updatedFarms')
     // console.log(results)
@@ -30,9 +31,6 @@ function updateFarms(results) {
         selectedList.push(option.value)
       }
     }
-    console.log(months);
-    // console.log(selectedList.value)
-    console.log(selectedList)
     
 
     // data here isn't what I want to send to api/farms, I think I need to figure out what the data being sent is

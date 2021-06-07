@@ -14,9 +14,23 @@
   <h2 class="form-signin-heading">Please Log In If You Already Have An Account</h2>
   <div class="form-group">
   </div>
-  <button class="btn btn-lg btn-primary btn-block" type="submit" name='login' value='login'>Log In
+  <button id='signIn' class="btn btn-lg btn-primary btn-block" type="submit" name='login' value='login'>Log In
     <!-- if I don't specify route with the action attribute, the default is that it goes back to the /login url in this case -->
   </button>
+  <script>
+    "use strict";
+
+    function changeStatus(){
+      if ($('#signIn').html() === 'Log In'){
+        $('#signIn').html('Log Out');
+      } else if ($('#signIn').html() === 'Log Out'){
+        $('#signIn').html('Log in');
+      }
+    }
+
+    $(".signIn").on('click', changeStatus);
+    
+  </script>
 </form>
 
   <form class="form-create-account" method="POST" action='/create_account'>

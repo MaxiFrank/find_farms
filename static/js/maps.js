@@ -1,5 +1,4 @@
 "use strict";
-
 // We use a function declaration for initMap because we actually *do* need
 // to rely on value-hoisting in this circumstance.
 
@@ -18,6 +17,51 @@ function moveToLocation(lat, lng, zoom){
   map.setZoom(zoom)
   }
 // moveToLocation(37.8044, -122.2712)
+function addBookMark(results) {
+  // bookmark success function: need to flip the button. Does flipping the button then somehow call the python crud function?
+  alert('farm has been added');
+  window.marker['icon']['url'] = '/static/img/marker.svg';
+  console.log(window.marker);
+  // infoWindow.open(window.map, marker);
+  // google.maps.event.trigger(window.map, "resize");
+  const markerInfo = (`
+  <h1>${window.marker.title}</h1>
+      <p>
+        Located at: <code>${window.marker.position.lat()}</code>,
+        <code>${window.marker.position.lng()}</code>
+        <code><a target='_blank' id='current-link' href='${window.marker.link}'>click here</a></code>
+        <code><div id="bookmark_farm_button" method="POST">Add to bookmark <button onclick="addFarm()">Add please!</button></div></code>
+      </p>`);
+
+//         <form action="" method="post">
+//     <input type="submit" name="upvote" value="Upvote" />
+// </form>
+
+const infoWindow = new google.maps.InfoWindow({
+                              content: markerInfo,
+                              maxWidth: 200});
+                        
+marker.addListener('click', (event) => {
+  // why is this not giving my tabs that would stay in the brower?
+  // window.open(link, '_blank_')
+  infoWindow.open(window.map, marker);
+  // const result = document.querySelector('.result');
+  // result.textContent = `Add ${link} to bookmark?`
+  console.log(marker)
+  // window.marker = marker
+  // console.log(marker)
+  // marker['icon']['url'] = '/static/img/marker.svg';
+});
+}
+
+function addFarm() {
+  // alert("works sort of");
+  const currentLink = document.querySelector('#current-link').getAttribute('href')
+  // When somebody clicks add, send off a POST, then have its success handler flip the button
+  const data = {'current-link':currentLink}
+  $.post("/api/bookmark", data, addBookMark, 'json');
+
+}
 
 function makeMarker(centerLon, centerLat, lon, lat, link, zoom) {
   moveToLocation(centerLon, centerLat, zoom)
@@ -27,32 +71,72 @@ function makeMarker(centerLon, centerLat, lon, lat, link, zoom) {
   //                           'lon':lon
   //                           }
   //                 };
-                  
+  // alert('before marker made');
   const marker = new google.maps.Marker({
                               position: new google.maps.LatLng(lat, lon),
-                              // title: 'stuff',
-                              map: window.map
-                              // icon: {  // custom icon
-                              //   url: '/static/img/marker.svg',
-                              //   scaledSize: {
-                              //     width: 30,
-                              //     height: 30
-                              //   }
-                              // }
+                              title: 'stuff',
+                              link: link, 
+                              map: window.map,
+                              optimized: true, 
+                              icon: {  // custom icon
+                                url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+                                // url: '/static/img/marker.svg',
+                                scaledSize: {
+                                  width: 30,
+                                  height: 30
+                                }
+                              }
                             });
+  // alert('after marker made');                          
+  const markerInfo = (`
+    <h1>${marker.title}</h1>
+        <p>
+          Located at: <code>${marker.position.lat()}</code>,
+          <code>${marker.position.lng()}</code>
+          <code><a target='_blank' id='current-link' href='${marker.link}'>click here</a></code>
+          <code><div id="bookmark_farm_button" method="POST">Add to bookmark <button onclick="addFarm()">Add please!</button></div></code>
+        </p>`);
+
+//         <form action="" method="post">
+//     <input type="submit" name="upvote" value="Upvote" />
+// </form>
+
+  const infoWindow = new google.maps.InfoWindow({
+                                content: markerInfo,
+                                maxWidth: 200});
+                          
   marker.addListener('click', (event) => {
     // why is this not giving my tabs that would stay in the brower?
-    window.open(link, '_blank_')
+    // window.open(link, '_blank_')
+    infoWindow.open(window.map, marker);
     // const result = document.querySelector('.result');
     // result.textContent = `Add ${link} to bookmark?`
+    console.log(marker)
+    window.marker = marker
+    // console.log(marker)
+    // marker['icon']['url'] = '/static/img/marker.svg';
   });
+
+
 
   return marker
 };
 
+
+function fetchFavorites() {
+  fetch('/api/bookmarked')
+  .then(function(response) {
+    response.json()
+  .then(function(data) {
+    for (let i=0; i<data.length; i++) {
+      makeMarker(data[i].center_lat, data[i].center_lon, data[i].lon, data[i].lat, data[i].link, data[i].zoom);
+    }
+  })
+})
+}
   // upon clicking on the marker, go to the farm page
 
-
+  $("#bookmark_farm_button").on('submit', addFarm);
 
 function initMap() {
   // the center of my map upon display (so this should be the either the state or the zip code I entered)
@@ -71,6 +155,21 @@ function initMap() {
   );
   
   window.map = basicMap
+
+  fetchFavorites()
+  // console.log(data);
+
+  // const data = fetchFavorites()
+
+  // for (i=0; i<data.length; i++) {
+  //   makeMarker(data[i]['centerLat'], data[i]['centerLon'], data[i]['lon'], data[i]['lat'], data[i]['link'], data[i]['zoom']);
+  // }
+
+  // add section to display all the farms the user already favorited
+}
+
+
+
   
 
   // this is where the farms go (need to look at documentation and stackoverflow basically)
@@ -141,4 +240,3 @@ function initMap() {
   //     infoWindow.open(basicMap, marker);
   //   });
   // }
-}

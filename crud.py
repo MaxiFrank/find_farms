@@ -90,3 +90,13 @@ def get_user(user_name):
     """Return farms by zip code."""
 
     return User.query.filter(User.user_name == user_name).first()
+
+def get_farms_by_user_id(user_id):
+    """Return farms by zip code."""
+
+    return Entry.query.filter(Entry.user_id == user_id).all()
+
+def get_farm_by_url(link):
+    """Return farms by zip code."""
+
+    return Farm.query.filter(Farm.link == link).first()
