@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block head %}
+  <link rel="stylesheet" href="/static/css/test.css"/>
+{% endblock %}
+
+{% block title %}Put Address{% endblock %}
+
+{% block body %}
+
+<!-- why only the /login path is loaded while the create_account path isn't -->
+<!-- if I change the position, then whichever comes first works -->
+{% if session.get('customer') %}
+  <div>logged in</div>
+{% endif %}
+
+
+<form class="form-login" method="GET" action='/login'>
+  <h2 class="form-signin-heading">Please Log In If You Already Have An Account</h2>
+  <div class="form-group">
+  </div>
+  <button id='signIn' class="btn btn-lg btn-primary btn-block" type="submit" name='login' value='login'>Log In
+    <!-- if I don't specify route with the action attribute, the default is that it goes back to the /login url in this case -->
+    
+  </button>
+</form>
+
+  <form class="form-create-account" method="POST" action='/create_account'>
+    <!-- the post method, once rendered, is saved (in browser memory now) -->
+  <h2 class="form-create-account-heading">Please Create an Account if You are a New User</h2>
+  <div class="form-group">
+  </div>
+  <button class="btn btn-lg btn-primary btn-block" type="submit" name='create-account' value='create-account'>Create Account
+    <!-- if I don't specify route with the action attribute, the default is that it goes back to the /login url in this case -->
+  </button>
+</form>
+
+<p><button onclick="location.href = '/current_location';" id="myButton">Start your adventure</button></p>
+
+
+
+  <!-- <h2>Put in Current Location</h2> -->
+  <!-- <form id="location-form" action="/current_location" method="GET"></form> -->
+    <!-- <p>
+      Current Zip Code <input type="text" name="zip_code" id="zip_code_field">
+    </p>
+
+    <p>
+      Find farms with <input type="text" name="miles" id="miles_field"> miles
+    </p>
+
+    <p> or </p>
+
+    <p>
+      Current State <input type="text" name="state" id="state_field">
+    </p> -->
+
+    <!-- <p>
+      <input type="submit">
+    </p> -->
+
+{% endblock %}

@@ -1,0 +1,24 @@
+.navbar {
+    background-color: #9CA845 !important;
+    color: white !important;
+}
+
+.nav-link {
+	color: white !important;
+}
+
+section {
+    margin-top: 50px;
+}
+
+.btn {
+    color: black !important;
+}
+
+#modalLabel {
+	color: black;
+}
+
+.modal-body {
+    color: black;
+}

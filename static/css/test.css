@@ -1,0 +1,12 @@
+body {
+    display: grid;
+    grid-template: 'head' 'map' 1fr / auto;
+  }
+  
+  header {
+    grid-area: head;
+  }
+  
+  #signIn {
+    font-size: 300%;
+  }

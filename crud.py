@@ -83,6 +83,11 @@ def get_farms_by_zip_code(zip_code):
 
     return Farm.query.filter(Farm.zip_code == zip_code).all()
 
+def get_farm_by_state(state):
+    """Return farms by zip code."""
+
+    return Farm.query.filter(Farm.state == state).first()
+
 def get_availability_by_farm(farm_id):
     return FarmAvailability.query.filter(FarmAvailability.farm_id == farm_id).all()
 

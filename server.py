@@ -22,11 +22,11 @@ app.jinja_env.undefined = StrictUndefined
 @app.route("/")
 def homepage():
     """View homepage."""
-
     return render_template("homepage.html")
 
-def find_farms(zip_code, miles, state=None, months=None):
+def find_farms(zip_code=None, miles=None, state=None, months=None):
     """finds relevant farms, take in zip code, radius, state as parameters"""
+
     zcdb = ZipCodeDatabase()
 
     if zip_code:
@@ -48,7 +48,20 @@ def find_farms(zip_code, miles, state=None, months=None):
                     farms.append(farm)
 
     if state:
-        farms = crud.get_farms_by_state(state)
+        farms = []
+        state_farms = crud.get_farms_by_state(state)
+        for farm in state_farms:
+    
+            availablities = crud.get_availability_by_farm(farm.farm_id)
+            
+            available_months = []
+            for availablity in availablities:
+                available_months.append(availablity.available_month)
+
+
+            if set(months).intersection(available_months):
+                farms.append(farm)
+
 
     farm_list = []
     for farm in farms:
@@ -59,13 +72,18 @@ def find_farms(zip_code, miles, state=None, months=None):
         farm_dict['lat'] = farm.lat
         farm_dict['link'] = farm.link
         farm_list.append(farm_dict)
-    
+
     return farm_list
 
-def find_coords(zip_code):
+def find_coords(zip_code=None, state=None):
     location = pgeocode.Nominatim('us')
-    lon = location.query_postal_code (zip_code).longitude
-    lat = location.query_postal_code (zip_code).latitude
+    if zip_code:
+        lon = location.query_postal_code(zip_code).longitude
+        lat = location.query_postal_code(zip_code).latitude
+    if state:
+        farm = crud.get_farm_by_state(state)
+        lon = farm.lon
+        lat = farm.lat
     return lon, lat
 
 @app.route('/api/farms', methods=["GET", "POST"])
@@ -73,30 +91,30 @@ def farms():
     """return list of relevant farms"""
     zip_code = request.form.get('zip_code', None)
     state = request.form.get('state', None)
-
-    # if user doesn't have miles, put in default
     miles = request.form.get('miles', None)
-
     months = [int(num) for num in request.form.getlist('months[]')]
 
     farm_lists = find_farms(zip_code=zip_code, miles=miles, state=state, months=months)
+    print(farm_lists)
 
-    lon, lat = find_coords(zip_code)
+    lon, lat = find_coords(zip_code,state)
+    print(lon, lat)
     
     return jsonify(lon, lat, farm_lists, miles)
 
 @app.route('/api/bookmark', methods=["GET", "POST"])
-
 def bookmark():
     """return list of relevant farms"""
-    current_link = request.form.get('current-link', None)
+    print(session)
+    user_name = session['customer']
 
-    user_name= session['customer']
-    user_id = crud.get_user(user_name).id
-    crud.create_entry(user_id=user_id, entry=current_link)
-
-    
-    return jsonify(current_link)
+    if user_name:
+        current_link = request.form.get('current-link', None)
+        user_id = crud.get_user(user_name).id
+        crud.create_entry(user_id=user_id, entry=current_link)
+        return jsonify(current_link)
+    else:
+        return ''
 
 @app.route("/current_location", methods=["GET"])
 def current_location():
@@ -131,8 +149,6 @@ def process_login():
     Find the user's login credentials located in the 'request.form'
     dictionary, look up the user, and store them in the session.
     """
-
-    # need to check that user_name doesn't already exist in the database
     user_name = request.form['user_name']
     password = request.form['password']
 
@@ -155,9 +171,7 @@ def process_login():
 
 @app.route("/logout", methods=["GET", "POST"])
 def process_logout():
-    print(session.items())
-    session.pop("customer", None)
-    print(session.items())
+    session['customer'] = None
     flash("logged out")
     return redirect("/")
 
