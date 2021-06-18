@@ -16,22 +16,12 @@ body {
     background: rgb(88, 89, 91);
   }
   
-  nav p, nav a, nav button {
-    display: inline-block;
-    color: white;
-    padding: 0;
-    margin: 0.5em;
-    font-size: 1em;
-    font-family: inherit;
-  }
-  
   nav a, nav button {
     background: transparent;
     background: transparent;
     border-top: 0;
     border-left: 0;
     border-right: 0;
-    border-bottom: 1px solid white;
     text-decoration: none;
   }
   
@@ -51,7 +41,7 @@ body {
   }
 
   .map, #map {
-    width: 100%;
-    height: 100%;
+    width: 80%;
+    height: 90%;
   }
   

@@ -37,6 +37,7 @@ class Entry(db.Model):
     entry_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     entry = db.Column(db.Text)
+    title = db.Column(db.String)
 
     def __repr__(self):
         return f'<Entry entry_id={self.entry_id} user_id={self.user_id}>'
@@ -75,6 +76,7 @@ class Farm(db.Model):
     state = db.Column(db.String)
     zip_code = db.Column(db.Integer)
     link = db.Column(db.String)
+    title = db.Column(db.Text)
 
     def __repr__(self):
         return f'<Farm farm_id={self.farm_id} state={self.state} zip_code={self.zip_code}>'

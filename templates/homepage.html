@@ -1,26 +1,13 @@
 {% extends 'base.html' %}
 
 {% block head %}
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
-
-  <link rel="stylesheet" href="/static/css/styles.css">
-  <link rel="stylesheet" href="/static/css/test.css"/>
-
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
 {% endblock %}
 
-{% block title %}Farm Locator{% endblock %}
-
 {% block body %}
-
-<!-- why only the /login path is loaded while the create_account path isn't -->
-<!-- if I change the position, then whichever comes first works -->
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
@@ -38,108 +25,98 @@
       <ul class="navbar-nav mr-auto">
       </ul>
 
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal">Login<span class="sr-only">(current)</span></a>
-      </li>
+      <ul class="navbar-nav ml-auto">
 
-      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modalLabel">Ubermelon Login</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              Log in here please
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Login</button>
+        {% if session['customer'] %}
+        <li class="nav-item active"></li>
+
+        <form class="form-login" method="GET" action='/logout'>
+          <li class="nav-item active"></li>
+          <a class="nav-link" id='signOut' href="/logout" data-target="#exampleModal">Log Out<span
+              class="sr-only">(current)</span></a>
+          </button>
+        </form>
+        {% else %}
+        <li class="nav-item active"></li>
+        <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal">Login<span
+            class="sr-only">(current)</span></a>
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Login if you have an account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                Log in here please
+              </div>
+              <div class="modal-footer">
+                <form class="form-login" method="GET" action='/login'>
+                  <button id='signIn' class="btn btn-lg btn-primary btn-block" type="submit" name='login'
+                    value='login'>Log in
+                  </button>
+                </form>
+              </div>
+              <div class="modal-body">
+                Create account if you don't have one
+              </div>
+              <div class="modal-footer">
+                <form class="form-create-account" method="POST" action='/create_account'>
+                  <button class="btn btn-lg btn-primary btn-block" type="submit" name='create-account'
+                    value='create-account'>Create Account
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Settings<span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Profile<span class="sr-only">(current)</span></a>
-      </li>
-    </ul>
-  </div>
+        {% endif %}
+        {% if session['customer'] %}
+        <li class="nav-item active">
+          <a class="nav-link" href="/favorite">{{ session['customer'] }}<span class="sr-only">(current)</span></a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
 </nav>
-  
+
+
   <div class="container-fluid">
-    <div class="row justify-content-center">
-      <section class="col-4 mx-auto">
-        <img src="./melon.jpg" class="img-fluid" alt="got to update this picture">
-        <p>Add blurb about how to use this website</p> 
+    <div class="row d-flex justify-content-center">
+      <section class="col-12 mx-auto">
+        <p>Connect with nature and volunteer on a farm in the United States</p> 
         </section>  
     </div>
-    
+  </div>
+
+  <div class="row">
+    <div class="container-fluid">
+      <div class='col-8'></div>
+      <i class="fas fa-tractor"></i>
+      <b>Explore farms in the United States</b>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="container-fluid">
+      <div class='col-8'></div>
+      <i class="fas fa-search-plus"></i>
+      <b>Connect with local farmers & communities and make friends</b>
+    </div>
+  </div>
+
 
   </div>
   
   <div class="container-fluid">
-
-{% if session['customer'] %}
-<form class="form-login" method="GET" action='/logout'>
-  <h2 class="form-signin-heading">Please Log In If You Already Have An Account</h2>
-  <div class="form-group">
-  </div>
-  <button id='signOut' class="btn btn-lg btn-primary btn-block" type="submit" name='logout' value='logout' >Log Out
-    <!-- if I don't specify route with the action attribute, the default is that it goes back to the /login url in this case -->
-  </button>
-</form>
+  {% if session['customer'] %}
+    <p><button class="float-left offset-1 btn btn-outline-secondary" onclick="location.href = '/current_location';" id="myButton">Continue your adventure</button></p>
   {% else %}
-  <form class="form-login" method="GET" action='/login'>
-    <h2 class="form-signin-heading">Please Log In If You Already Have An Account</h2>
-    <div class="form-group">
-    </div>
-    <button id='signIn' class="btn btn-lg btn-primary btn-block" type="submit" name='login' value='login'>Log in
-      <!-- if I don't specify route with the action attribute, the default is that it goes back to the /login url in this case -->
-    </button>
-  </form>
+    <p><button class="float-left offset-1 btn btn-outline-secondary" onclick="location.href = '/current_location';" id="myButton">Start as a guest</button></p>
   {% endif %}
 
-
-  <form class="form-create-account" method="POST" action='/create_account'>
-    <!-- the post method, once rendered, is saved (in browser memory now) -->
-  <h2 class="form-create-account-heading">Please Create an Account if You are a New User</h2>
-  <div class="form-group">
-  </div>
-  <button class="btn btn-lg btn-primary btn-block" type="submit" name='create-account' value='create-account'>Create Account
-    <!-- if I don't specify route with the action attribute, the default is that it goes back to the /login url in this case -->
-  </button>
-</form>
-
-<p><button onclick="location.href = '/current_location';" id="myButton">Start your adventure</button></p>
-
-
-
-  <!-- <h2>Put in Current Location</h2> -->
-  <!-- <form id="location-form" action="/current_location" method="GET"></form> -->
-    <!-- <p>
-      Current Zip Code <input type="text" name="zip_code" id="zip_code_field">
-    </p>
-
-    <p>
-      Find farms with <input type="text" name="miles" id="miles_field"> miles
-    </p>
-
-    <p> or </p>
-
-    <p>
-      Current State <input type="text" name="state" id="state_field">
-    </p> -->
-
-    <!-- <p>
-      <input type="submit">
-    </p> -->
-
-{% endblock %}
+      {% endblock %}
+</html>

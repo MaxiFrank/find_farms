@@ -1,3 +1,8 @@
+var currentState = ''
+function captureValue(objButton){  
+  currentState =  objButton.innerText;
+  console.log(currentState);
+}
 
 function updateFarms(results) {
     centerLon = results[0]
@@ -10,17 +15,17 @@ function updateFarms(results) {
     } else {
       zoom = 9
     }
-
     for (i=0; i<results[2].length; i++){
-      makeMarker(centerLat, centerLon, results[2][i].lon, results[2][i].lat, results[2][i].link, zoom);
+      makeMarker(centerLat, centerLon, results[2][i].lon, results[2][i].lat, results[2][i].link, zoom, results[2][i].title);
     }
   }
 
   function showFarms(evt) {
+    console.log(currentState);
     evt.preventDefault();
     let zip_code = document.querySelector('#zip_code_field').value;
     let miles = document.querySelector('#miles_field').value;
-    let state = document.querySelector('#state_field').value
+    let state = window.currentState
     let months = document.querySelector('#months_field');
     const selectedList = [];
     for (let option of months.options) {

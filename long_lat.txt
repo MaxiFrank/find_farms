@@ -93,7 +93,7 @@
                     layers: [tileLayerMap]
                 };
 
-                self.map = L.map('openstreetmap-1621289029', mapOptions);
+                self.map = L.map('openstreetmap-1623877892', mapOptions);
 
                 
                 
@@ -124,7 +124,7 @@
                 });
 
                 self.subscribeMapEvent(self.events.SCROLL_TO_MAP, function () {
-                    $('html, body').animate({scrollTop: $('#openstreetmap-1621289029').position().top + 50}, 300);
+                    $('html, body').animate({scrollTop: $('#openstreetmap-1623877892').position().top + 50}, 300);
                 });
 
                 self.initControls();

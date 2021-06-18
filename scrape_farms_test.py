@@ -28,8 +28,10 @@ while next_page:
 
     for link in links_on_page:
         driver.get(link)
-        content = driver.find_element_by_css_selector('#mapcontainer script:nth-child(5)')
+        # content = driver.find_element_by_css_selector('#mapcontainer script:nth-child(5)')
+        title = driver.execute_script('return document.querySelector(".nomargin").innerText')
         html_script = driver.execute_script('return document.querySelector("#mapcontainer script:nth-child(5)").innerText')
+
         text_file = open('long_lat.txt', 'w')
         text_file.write(html_script)
         text_file.close()
@@ -44,6 +46,7 @@ while next_page:
                     farm['lat'] = float(clean_line[1].split('"')[3])
                     farm['lon'] = float(clean_line[2].split('"')[3])
                     farm['link'] = link
+                    farm['title'] = title
 
         availability = {}
         for i in range(0, 12):

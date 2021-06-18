@@ -1,5 +1,5 @@
 .navbar {
-    background-color: #9CA845 !important;
+    background-color:black !important;
     color: white !important;
 }
 
@@ -8,7 +8,13 @@
 }
 
 section {
-    margin-top: 50px;
+    margin-top: 100px;
+    margin-left: 100px;
+    margin-right: 100px;
+    font-family: Open Sans;
+    font-weight: 600;
+    color: black;
+    font-size: 48px;
 }
 
 .btn {
@@ -22,3 +28,13 @@ section {
 .modal-body {
     color: black;
 }
+
+/* #fav-col {
+    width: 25%;
+    height: 100%;
+    background-image: url(bison.jpg);
+} */
+#fav-col {
+    background: url(bison.jpg) no-repeat center center;
+    background-size: cover;
+  }

@@ -29,6 +29,11 @@ def find_farms(zip_code=None, miles=None, state=None, months=None):
 
     zcdb = ZipCodeDatabase()
 
+    # not sure if this solves the problem
+    if not miles:
+        miles = 10
+    if not months:
+        months = [1,2,3,4,5,6,7,8,9,10,11,12]
     if zip_code:
         
         nearby_zip_codes = [z.zip for z in zcdb.get_zipcodes_around_radius(str(zip_code), int(miles))]
@@ -71,6 +76,7 @@ def find_farms(zip_code=None, miles=None, state=None, months=None):
         farm_dict['lon'] = farm.lon
         farm_dict['lat'] = farm.lat
         farm_dict['link'] = farm.link
+        farm_dict['title'] = farm.title
         farm_list.append(farm_dict)
 
     return farm_list
@@ -95,10 +101,8 @@ def farms():
     months = [int(num) for num in request.form.getlist('months[]')]
 
     farm_lists = find_farms(zip_code=zip_code, miles=miles, state=state, months=months)
-    print(farm_lists)
 
     lon, lat = find_coords(zip_code,state)
-    print(lon, lat)
     
     return jsonify(lon, lat, farm_lists, miles)
 
@@ -110,8 +114,9 @@ def bookmark():
 
     if user_name:
         current_link = request.form.get('current-link', None)
+        current_title = request.form.get('current-title', None)
         user_id = crud.get_user(user_name).id
-        crud.create_entry(user_id=user_id, entry=current_link)
+        crud.create_entry(user_id=user_id, entry=current_link, title=current_title)
         return jsonify(current_link)
     else:
         return ''
@@ -123,7 +128,9 @@ def current_location():
     GOOGLE_MAPS_KEY = os.environ['GOOGLE_MAPS_KEY']
     print('printing session info')
     print(session.items())
-    return render_template("current-location.html", GOOGLE_MAPS_KEY=GOOGLE_MAPS_KEY)
+    states = crud.get_states()
+    print(states)
+    return render_template("current-location.html", GOOGLE_MAPS_KEY=GOOGLE_MAPS_KEY, states=states)
 
 @app.route("/create_account", methods=["POST"])
 def create_account():
@@ -175,14 +182,14 @@ def process_logout():
     flash("logged out")
     return redirect("/")
 
-@app.route("/bookmarked", methods=["GET"])
+@app.route("/favorite")
 def list_farms():
     """create user account."""
     username = session['customer']
     user_id = crud.get_user(username).id
-    farms = crud.get_farms_by_user_id(user_id)
-
-    return jsonify(lon, lat, farm_lists, miles)
+    entry_farms = crud.get_farms_by_user_id(user_id)
+    farms = [crud.get_complete_farm_from_entry(entry_farm.title) for entry_farm in entry_farms]
+    return render_template("bookmarked.html", farms=farms)
 
 @app.route("/api/bookmarked", methods=["GET"])
 def show_existing_favorites():
@@ -196,14 +203,16 @@ def show_existing_favorites():
     farm_links = [farm.entry for farm in farms_raw]
     # get farms from farm links
     farms = [crud.get_farm_by_url(farm_link) for farm_link in farm_links]
+    # print(farms)
     farm_list = []
+
     for farm in farms:
         farm_dict = {}
         farm_dict['center_lon'] = -98.5795
         farm_dict['center_lat'] = 39.8283
         farm_dict['lon'] = farm.lon
         farm_dict['lat'] = farm.lat
-        farm_dict['link'] = farm. link
+        farm_dict['link'] = farm.link
         farm_dict['zoom'] = 4
         farm_list.append(farm_dict)
 

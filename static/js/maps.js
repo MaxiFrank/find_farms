@@ -11,10 +11,11 @@ function addBookMark(results) {
   alert('farm has been added');
   const lat = window.marker.position.lat();
   const lng = window.marker.position.lng();
+  const title = window.marker.title
   window.marker.setMap(null);
   const marker = new google.maps.Marker({
     position: new google.maps.LatLng(lat, lng),
-    title: 'stuff',
+    title: title,
     map: window.map,
     optimized: true, 
     icon: {  // custom icon
@@ -44,16 +45,18 @@ marker.addListener('click', (event) => {
 
 function addFarm() {
   const currentLink = document.querySelector('#current-link').getAttribute('href')
-  const data = {'current-link':currentLink}
+  const currentTitle = document.querySelector('#current-title').innerText
+  const data = {'current-link':currentLink
+                ,'current-title':currentTitle}
   $.post("/api/bookmark", data, addBookMark, 'json');
 
 }
 
-function makeMarker(centerLon, centerLat, lon, lat, link, zoom) {
+function makeMarker(centerLon, centerLat, lon, lat, link, zoom, title) {
   moveToLocation(centerLon, centerLat, zoom)
   const marker = new google.maps.Marker({
                               position: new google.maps.LatLng(lat, lon),
-                              title: 'stuff',
+                              title: title,
                               link: link, 
                               map: window.map,
                               optimized: true, 
@@ -65,12 +68,10 @@ function makeMarker(centerLon, centerLat, lon, lat, link, zoom) {
                                   height: 30
                                 }
                               }
-                            });                
+                            });              
   const markerInfo = (`
-    <h1>${marker.title}</h1>
+    <h5 id='current-title'>${marker.title}</h5>
         <p>
-          Located at: <code>${marker.position.lat()}</code>,
-          <code>${marker.position.lng()}</code>
           <code><a target='_blank' id='current-link' href='${marker.link}'>click here</a></code>
           <code><div id="bookmark_farm_button" method="POST">Add to bookmark <button onclick="addFarm()">Add please!</button></div></code>
         </p>`);
@@ -97,7 +98,7 @@ function fetchFavorites() {
     response.json()
   .then(function(data) {
     for (let i=0; i<data.length; i++) {
-      makeMarker(data[i].center_lat, data[i].center_lon, data[i].lon, data[i].lat, data[i].link, data[i].zoom);
+      makeMarker(data[i].center_lat, data[i].center_lon, data[i].lon, data[i].lat, data[i].link, data[i].zoom, data[i].title);
     }
   })
 })

@@ -1,93 +1,150 @@
 {% extends 'base.html' %}
 
 {% block head %}
-  <link rel="stylesheet" href="/static/css/maps.css"/>
-  <script src="/static/js/maps.js"></script>
-  <script
-    defer
-    src='https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_KEY }}&callback=initMap'>
-  </script>
-  <script defer src="/static/js/showfarms.js"></script>
-  <script src="/static/lib/babel-standalone.js"></script>
-  <script src="/static/lib/react.development.js"></script>
-  <script src="/static/lib/react-dom.development.js"></script>
+<link rel="stylesheet" href="/static/css/maps.css" />
+<script src="/static/js/maps.js"></script>
+<script defer src='https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_KEY }}&callback=initMap'>
+</script>
+<script defer src="/static/js/showfarms.js"></script>
+<script src="/static/lib/babel-standalone.js"></script>
+<script src="/static/lib/react.development.js"></script>
+<script src="/static/lib/react-dom.development.js"></script>
 {% endblock %}
 
 {% block title %}Put Address{% endblock %}
 
 {% block body %}
-    <header>
-        <nav>
-          <section id="links-right">
-            <a href="/">home</a>
-          </section>
-        </nav>
-      </header>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-      <main>
-        <section class="map">
-          <div id="map"></div>
-        </section>
-      </main>
-    
-      <!-- <h2>Farms</h2> -->
-    
-      <!-- <p>See farms here
-      <div id="farm-text"></div>
-      </p>
-  <form id="location-form_1" method="GET">
-    <p>
-      <input type="submit">
-    </p>
-  </form> -->
-  
-    <h2>Put in Current Location</h2>
-    <!-- I should be submitting to api/farms -->
-    <form id="additonal-location-form" method="POST">
-      <p>
-        Current Zip Code <input type="text" name="zip_code" id="zip_code_field">
-      </p>
-  
-      <p>
-        Find farms with <input type="text" name="miles" id="miles_field"> miles
-      </p>
-  
-      <p> or </p>
-  
-      <p>
-        Current State <input type="text" name="state" id="state_field">
-      </p>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">About<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Contact<span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
 
-      <p>
-          <div>
-            Choose desired months
-            <select type="text" name="months" id="months_field" multiple="multiple">
-                <option value="1">January</option>
-                <option value="2">February</option>
-                <option value="3">March</option>
-                <option value="4">April</option>
-                <option value="5">May</option>
-                <option value="6">June</option>
-                <option value="7">July</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-            </select>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+      </ul>
+
+      <ul class="navbar-nav ml-auto">
+
+        {% if session['customer'] %}
+        <li class="nav-item active"></li>
+
+        <form class="form-login" method="GET" action='/logout'>
+          <li class="nav-item active"></li>
+          <a class="nav-link" id='signOut' href="/logout" data-target="#exampleModal">Log Out<span
+              class="sr-only">(current)</span></a>
+          </button>
+        </form>
+        {% else %}
+        <li class="nav-item active"></li>
+        <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal">Login<span
+            class="sr-only">(current)</span></a>
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Login if you have an account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                Log in here please
+              </div>
+              <div class="modal-footer">
+                <form class="form-login" method="GET" action='/login'>
+                  <button id='signIn' class="btn btn-lg btn-primary btn-block" type="submit" name='login'
+                    value='login'>Log in
+                  </button>
+                </form>
+              </div>
+              <div class="modal-body">
+                Create account if you don't have one
+              </div>
+              <div class="modal-footer">
+                <form class="form-create-account" method="POST" action='/create_account'>
+                  <button class="btn btn-lg btn-primary btn-block" type="submit" name='create-account'
+                    value='create-account'>Create Account
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
+        {% endif %}
+        {% if session['customer'] %}
+        <li class="nav-item active">
+          <a class="nav-link" href="/favorite">{{ session['customer'] }}<span class="sr-only">(current)</span></a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+</nav>
+<main>
+  <section class="map">
+    <div id="map"></div>
+  </section>
+</main>
 
-          </select>
-      </div>
-      </p>
-  
+
+<h2>Find a farm using zip code</h2>
+<form id="additonal-location-form" method="POST">
+  <div class="form-group">
+    <div class="container-fluid">
       <p>
-        <input type="submit">
+        Zip Code <input type="text" name="zip_code" id="zip_code_field"> within <input type="text" name="miles"
+          id="miles_field"> miles
       </p>
-    </form>
+    </div>
+  </div>
 
-    <div id="root"></div>
-    <!-- <div class="result"> </div> -->
+  <h2>Find a farm using state</h2>
+  <div class="form-group">
+    <div class="container-fluid">
+      {% for state in states %}
+      <button id="state_field" type="button" class="btn btn-light" onclick='captureValue(this)'>{{ state }}</button>
+      {% endfor %}
+    </div>
+  </div>
+
+  <p>
+  <div class="form-group">
+    <h2>Select month(s) you want to visit</h2>
+    <select multiple class="form-control" type="text" name="months" id="months_field">
+      <option value="1">January</option>
+      <option value="2">February</option>
+      <option value="3">March</option>
+      <option value="4">April</option>
+      <option value="5">May</option>
+      <option value="6">June</option>
+      <option value="7">July</option>
+      <option value="8">August</option>
+      <option value="9">September</option>
+      <option value="10">October</option>
+      <option value="11">November</option>
+      <option value="12">December</option>
+    </select>
+  </div>
+
+  </select>
+  </div>
+  </p>
+
+  <p>
+    <input type="submit">
+  </p>
+</form>
 
 
 

@@ -22,10 +22,10 @@ def create_image(user_id, image):
 
     return image
 
-def create_entry(user_id, entry):
+def create_entry(user_id, entry, title):
     """create a user entry and return the entry"""
 
-    entry = Entry(user_id=user_id, entry=entry)
+    entry = Entry(user_id=user_id, entry=entry, title=title)
 
     db.session.add(entry)
     db.session.commit()
@@ -52,10 +52,10 @@ def create_current_location(user_id, location_id):
 
     return current_location
 
-def create_farm(lon, lat, state, zip_code, link):
+def create_farm(lon, lat, state, zip_code, link, title):
     """create farm with a link to images in the static folder"""
 
-    farm = Farm(lon=lon, lat=lat, state=state, zip_code=zip_code, link=link)
+    farm = Farm(lon=lon, lat=lat, state=state, zip_code=zip_code, link=link, title=title)
 
     db.session.add(farm)
     db.session.commit()
@@ -105,3 +105,12 @@ def get_farm_by_url(link):
     """Return farms by zip code."""
 
     return Farm.query.filter(Farm.link == link).first()
+
+def get_states():
+    query = db.session.query(Farm.state.distinct().label("state"))
+    states = [row.state for row in query.all()]
+    return states
+
+def get_complete_farm_from_entry(title):
+    
+    return Farm.query.filter(Farm.title == title).first()
