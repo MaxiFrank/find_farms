@@ -8,18 +8,18 @@ function moveToLocation(lat, lng, zoom){
   }
 
 function addBookMark(results) {
-  alert('farm has been added');
   const lat = window.marker.position.lat();
   const lng = window.marker.position.lng();
   const title = window.marker.title
+  const link = window.marker.link
   window.marker.setMap(null);
   const marker = new google.maps.Marker({
     position: new google.maps.LatLng(lat, lng),
     title: title,
     map: window.map,
     optimized: true, 
-    icon: {  // custom icon
-      url: '/static/img/marker.svg',
+    icon: {
+      url: '/static/img/cow.svg',
       scaledSize: {
         width: 30,
         height: 30
@@ -33,13 +33,19 @@ function addBookMark(results) {
 
   });
 
-const infoWindow = new google.maps.InfoWindow({
+  const markerInfo = (`
+  <div id='current-title'>'${title}'</div>
+      <p>
+        <code><a target='_blank' id='current-link' href='${link}'>see more details here</a></code>
+      </p>`);
+
+  const infoWindow = new google.maps.InfoWindow({
                               content: markerInfo,
                               maxWidth: 200});
                         
-marker.addListener('click', (event) => {
-  infoWindow.open(window.map, marker);
-  console.log(marker)
+  marker.addListener('click', (event) => {
+    infoWindow.open(window.map, marker);
+    console.log(marker)
 });
 }
 
@@ -48,11 +54,16 @@ function addFarm() {
   const currentTitle = document.querySelector('#current-title').innerText
   const data = {'current-link':currentLink
                 ,'current-title':currentTitle}
+  console.log('currentLink')
+  console.log(currentLink)
+  console.log('currentTitle')
+  console.log(currentTitle)
+
   $.post("/api/bookmark", data, addBookMark, 'json');
 
 }
 
-function makeMarker(centerLon, centerLat, lon, lat, link, zoom, title) {
+function makeMarker(centerLon, centerLat, lon, lat, link, zoom, title, icon_link) {
   moveToLocation(centerLon, centerLat, zoom)
   const marker = new google.maps.Marker({
                               position: new google.maps.LatLng(lat, lon),
@@ -60,20 +71,21 @@ function makeMarker(centerLon, centerLat, lon, lat, link, zoom, title) {
                               link: link, 
                               map: window.map,
                               optimized: true, 
-                              icon: {  // custom icon
-                                url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-                                // url: '/static/img/marker.svg',
+                              icon: {
+                                url: icon_link,
                                 scaledSize: {
                                   width: 30,
                                   height: 30
                                 }
                               }
                             });              
+
+  // if user isn't logged in, I don't want the add to favorites button to exist.
   const markerInfo = (`
-    <h5 id='current-title'>${marker.title}</h5>
+    <div id='current-title'>'${marker.title}'</div>
         <p>
-          <code><a target='_blank' id='current-link' href='${marker.link}'>click here</a></code>
-          <code><div id="bookmark_farm_button" method="POST">Add to bookmark <button onclick="addFarm()">Add please!</button></div></code>
+          <code><a target='_blank' id='current-link' href='${marker.link}'>see more details here</a></code>
+          <code><div class="bookmark_farm_button" method="POST"><button onclick="addFarm()">Add to Favorites</button></div></code>
         </p>`);
 
   const infoWindow = new google.maps.InfoWindow({
@@ -98,7 +110,7 @@ function fetchFavorites() {
     response.json()
   .then(function(data) {
     for (let i=0; i<data.length; i++) {
-      makeMarker(data[i].center_lat, data[i].center_lon, data[i].lon, data[i].lat, data[i].link, data[i].zoom, data[i].title);
+      makeMarker(data[i].center_lat, data[i].center_lon, data[i].lon, data[i].lat, data[i].link, data[i].zoom, data[i].title,'/static/img/cow.svg');
     }
   })
 })

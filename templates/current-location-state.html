@@ -11,7 +11,7 @@
 <script src="/static/lib/react-dom.development.js"></script>
 {% endblock %}
 
-{% block title %}Find famrs by zip code{% endblock %}
+{% block title %}Find farms by state{% endblock %}
 
 {% block body %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -87,45 +87,51 @@
     </div>
 </nav>
 
-<div class="container">
-<div class="row">
-  <div class="col-12 mt-2">
-  <main>
-      <div id="map"></div>
-  </main>
-  </div>
-</div>
 
-<h2 class="mt-5 mb-3">Find a farm using zip code</h2>
-<form id="additonal-location-form" method="POST">
-  <div class="form-group">
-    <div class="container-fluid">
-        Zip Code <input type="text" name="zip_code" id="zip_code_field"> within <input type="text" name="miles"
-          id="miles_field"> miles
+<div class="container">
+  <div class="row">
+    <div class="col-12 mt-2">
+    <main>
+        <div id="map"></div>
+    </main>
     </div>
   </div>
-
+  
+  <h2 class="mt-5 mb-3">Find a farm using state</h2>
+  <form id="additonal-location-form" method="POST">
   <div class="form-group">
-    <h2 class="mt-5 mb-3">Select month(s) you want to visit</h2>
-    <select multiple class="form-control" type="text" name="months" id="months_field">
-      <option value="1">January</option>
-      <option value="2">February</option>
-      <option value="3">March</option>
-      <option value="4">April</option>
-      <option value="5">May</option>
-      <option value="6">June</option>
-      <option value="7">July</option>
-      <option value="8">August</option>
-      <option value="9">September</option>
-      <option value="10">October</option>
-      <option value="11">November</option>
-      <option value="12">December</option>
-    </select>
+    <div class="container-fluid">
+      {% for state in states %}
+      <button id="state_field" type="button" class="btn btn-light btn-sm" onclick='captureValue(this)'>{{ state }}</button>
+      {% endfor %}
+    </div>
+  </div>
+  
+  
+    <div class="form-group">
+      <h2 class="mt-5 mb-3">Select month(s) you want to visit</h2>
+      <select multiple class="form-control" type="text" name="months" id="months_field">
+        <option value="1">January</option>
+        <option value="2">February</option>
+        <option value="3">March</option>
+        <option value="4">April</option>
+        <option value="5">May</option>
+        <option value="6">June</option>
+        <option value="7">July</option>
+        <option value="8">August</option>
+        <option value="9">September</option>
+        <option value="10">October</option>
+        <option value="11">November</option>
+        <option value="12">December</option>
+      </select>
+    </div>
+  
+    <input type="submit" class="btn btn-light">
+  </form>
+  
+  
   </div>
 
-  <input type="submit" class="btn btn-light">
-</form>
 
 
-</div>
 {% endblock %}

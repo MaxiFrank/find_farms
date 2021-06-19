@@ -14,10 +14,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">About<span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Contact<span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/about">About<span class="sr-only">(current)</span></a>
       </li>
     </ul>
 
@@ -45,27 +42,21 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="modalLabel">Login if you have an account</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title" id="modalLabel">Login or create account</h5>
+                <button type="button" class="close btn-primary" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body">
-                Log in here please
-              </div>
               <div class="modal-footer">
                 <form class="form-login" method="GET" action='/login'>
-                  <button id='signIn' class="btn btn-lg btn-primary btn-block" type="submit" name='login'
+                  <button id='signIn' class="btn btn-outline-secondary modal-button" type="submit" name='login'
                     value='login'>Log in
                   </button>
                 </form>
               </div>
-              <div class="modal-body">
-                Create account if you don't have one
-              </div>
               <div class="modal-footer">
                 <form class="form-create-account" method="POST" action='/create_account'>
-                  <button class="btn btn-lg btn-primary btn-block" type="submit" name='create-account'
+                  <button class="btn btn-outline-secondary modal-button" type="submit" name='create-account'
                     value='create-account'>Create Account
                   </button>
                 </form>
@@ -84,39 +75,43 @@
 </nav>
 
 
-  <div class="container-fluid">
-    <div class="row d-flex justify-content-center">
-      <section class="col-12 mx-auto">
-        <p>Connect with nature and volunteer on a farm in the United States</p> 
-        </section>  
-    </div>
-  </div>
-
+<div class="container-fluid">
   <div class="row">
-    <div class="container-fluid">
-      <div class='col-8'></div>
-      <i class="fas fa-tractor"></i>
-      <b>Explore farms in the United States</b>
+    <div class="col-7 mt-5 homepage_text_main">
+      <h1>Connect with nature and volunteer on a farm in the United States</h1>
+
+
+
+      <div class="row homepage_text_sub font-italic">
+
+        <span>
+          <i class="fas fa-tractor ml-3 mb-3"></i>  Explore farms in the United States
+        </span>
+
+      </div>
+
+      <div class="row homepage_text_sub font-italic">
+        <span>
+          <i class="fas fa-search-plus ml-3 mb-3"></i>  Connect with local farmers & communities and make friends
+        </span>
+      </div>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="container-fluid">
-      <div class='col-8'></div>
-      <i class="fas fa-search-plus"></i>
-      <b>Connect with local farmers & communities and make friends</b>
+
+    <div class="row homepage_background align-items-center justify-content-center">
+      <div class='col-5'>
+        {% if session['customer'] %}
+        <button class="btn btn-outline-secondary homepage_button" onclick="location.href = '/current_location';"
+            id="myButton">Continue your adventure by zip</button>
+        <button class="btn btn-outline-secondary homepage_button"
+            onclick="location.href = '/current_location_state';" id="myButton">Continue your adventure by state</button>
+        {% else %}
+        <button class="btn btn-outline-secondary homepage_button" onclick="location.href = '/current_location';"
+            id="myButton">Start as a guest and search farms by zip</button>
+        <button class="btn btn-outline-secondary homepage_button"
+            onclick="location.href = '/current_location_state';" id="myButton">Start as a guest and search farms by state</button>
+        {% endif %}
+      </div>
     </div>
-  </div>
-
-
-  </div>
-  
-  <div class="container-fluid">
-  {% if session['customer'] %}
-    <p><button class="float-left offset-1 btn btn-outline-secondary" onclick="location.href = '/current_location';" id="myButton">Continue your adventure</button></p>
-  {% else %}
-    <p><button class="float-left offset-1 btn btn-outline-secondary" onclick="location.href = '/current_location';" id="myButton">Start as a guest</button></p>
-  {% endif %}
-
-      {% endblock %}
-</html>
+</div>
+  {% endblock %}

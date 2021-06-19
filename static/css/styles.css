@@ -7,16 +7,6 @@
 	color: white !important;
 }
 
-section {
-    margin-top: 100px;
-    margin-left: 100px;
-    margin-right: 100px;
-    font-family: Open Sans;
-    font-weight: 600;
-    color: black;
-    font-size: 48px;
-}
-
 .btn {
     color: black !important;
 }
@@ -29,12 +19,56 @@ section {
     color: black;
 }
 
-/* #fav-col {
-    width: 25%;
-    height: 100%;
-    background-image: url(bison.jpg);
-} */
-#fav-col {
-    background: url(bison.jpg) no-repeat center center;
-    background-size: cover;
+.page-header h1 {
+    margin-top: 0px;
   }
+
+  .page-header {
+      height: 400px;
+      margin-top: 0px;
+      background-size: cover;
+      background-image: url('/static/img/bison_2.jpg');
+      /* filter: blur(0px); */
+      display: grid;
+  }
+
+.homepage_background{
+    background-color: rgb(247, 247, 249);
+    height: calc(100vh - 100px);
+    margin-top: 20px;
+    padding: 100px 40px 0px;
+  }
+
+  .homepage_text_sub{
+      color: rgb(114, 113, 117);
+      margin-top: 50px
+  }
+
+  .homepage_text_main{
+    height: calc(100vh - 100px);
+    margin-top: 50px;
+    margin-right: 50px;
+    padding: 100px 40px 0px;
+  }
+
+  .homepage_button{
+      margin-bottom: 200px;
+  }
+
+.modal-button{
+    background-color: rgb(247, 247, 249);
+    border: rgb(247, 247, 249);
+  }
+
+  .modal-footer {
+    border-top: 0 none;
+}
+
+.form-signin {
+    background-color: white;
+    padding: 20px;
+}
+
+.form-control{
+    width: 30%;
+}

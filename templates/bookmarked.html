@@ -2,7 +2,6 @@
 
 {% block title %}Farms{% endblock %}
 
-
 {% block body %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -13,10 +12,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">About<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/about">About<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="#">Contact<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
             </li>
         </ul>
 
@@ -40,27 +39,28 @@
         </div>
 </nav>
 
-<!-- put in a picture, not showing up right now.... -->
-<div class="container mt-2" id="fav-col">
-    <div class="row justify-content-center">
-        <section class="col-12 mx-auto">
-        </section>
+<div class="page-header">
+  </div>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class='col-12'>
+            <h2 class='mt-5 mb-4'>Your Favorite Farms</h2>
+        </div>    
+    </div>
+
+    <div class="row">
+        <div class='col-12'>
+            <ul class="list-group list-group-flush ml-3">
+                {% for farm in farms %}
+                    {% if farm is not none %}
+                        <li><a href="{{ farm.link }}" target="_blank">{{ farm.title }}</a></li>
+                        {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
+{% endblock %}
 
-
-<div class="container mt-2">
-    <div class="row justify-content-left">
-        <p>
-        <h2>Your Favorite Farms</h2>
-        </p>
-    </div>
-    <!-- make for loop and get farms in bullets + get actual links here so i can reference -->
-    <ul class="list-group list-group-flush">
-
-        {% for farm in farms %}
-        <li><a href="{{ farm.link }}" target="_blank">{{ farm.title }}</a></li>
-        {% endfor %}
-    </ul>
-
-    {% endblock %}

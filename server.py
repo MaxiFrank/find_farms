@@ -17,7 +17,9 @@ from pyzipcode import ZipCodeDatabase
 app = Flask(__name__)
 app.secret_key = "dev"
 app.jinja_env.undefined = StrictUndefined
+# SESSION_COOKIE_HTTPONLY = False
 
+# session.cookie_httponly=on
 
 @app.route("/")
 def homepage():
@@ -34,6 +36,23 @@ def find_farms(zip_code=None, miles=None, state=None, months=None):
         miles = 10
     if not months:
         months = [1,2,3,4,5,6,7,8,9,10,11,12]
+
+    username = session['customer']
+    farm_ids = [None]
+    if username:
+    # get a list of farm ids
+        # get username from user_id
+        user_id = crud.get_user(username).id
+        # get farms from entry table
+        farms_raw = crud.get_farms_by_user_id(user_id)
+        # get farm links
+        farm_links = [farm.entry for farm in farms_raw]
+        # get farms from farm links
+        farms_entry = [crud.get_farm_by_url(farm_link) for farm_link in farm_links]
+        # get farm ids
+        farm_ids = [farm.farm_id for farm in farms_entry]
+
+    
     if zip_code:
         
         nearby_zip_codes = [z.zip for z in zcdb.get_zipcodes_around_radius(str(zip_code), int(miles))]
@@ -42,30 +61,31 @@ def find_farms(zip_code=None, miles=None, state=None, months=None):
             farms_per_zip_code = crud.get_farms_by_zip_code(z)
             if farms_per_zip_code:
                 for farm in farms_per_zip_code:
-                   
-                    availablities = crud.get_availability_by_farm(farm.farm_id)
-                    available_months = []
-                    
-                    for availablity in availablities:
-                        available_months.append(availablity.available_month)
+                    if farm.farm_id not in farm_ids:
+                        availablities = crud.get_availability_by_farm(farm.farm_id)
+                        available_months = []
+                        
+                        for availablity in availablities:
+                            available_months.append(availablity.available_month)
 
-                if set(months).intersection(available_months):
-                    farms.append(farm)
+                        if set(months).intersection(available_months):
+                            farms.append(farm)
 
     if state:
         farms = []
         state_farms = crud.get_farms_by_state(state)
         for farm in state_farms:
+            if farm.farm_id not in farm_ids:
     
-            availablities = crud.get_availability_by_farm(farm.farm_id)
-            
-            available_months = []
-            for availablity in availablities:
-                available_months.append(availablity.available_month)
+                availablities = crud.get_availability_by_farm(farm.farm_id)
+                
+                available_months = []
+                for availablity in availablities:
+                    available_months.append(availablity.available_month)
 
 
-            if set(months).intersection(available_months):
-                farms.append(farm)
+                if set(months).intersection(available_months):
+                    farms.append(farm)
 
 
     farm_list = []
@@ -87,7 +107,7 @@ def find_coords(zip_code=None, state=None):
         lon = location.query_postal_code(zip_code).longitude
         lat = location.query_postal_code(zip_code).latitude
     if state:
-        farm = crud.get_farm_by_state(state)
+        farm = crud.get_farm_by_state(state)[0]
         lon = farm.lon
         lat = farm.lat
     return lon, lat
@@ -126,11 +146,23 @@ def current_location():
     """View current location."""
 
     GOOGLE_MAPS_KEY = os.environ['GOOGLE_MAPS_KEY']
+    # print('printing session info')
+    # print(session.items())
+    # states = crud.get_states()
+    # print(states)
+    return render_template("current-location.html", GOOGLE_MAPS_KEY=GOOGLE_MAPS_KEY)
+
+@app.route("/current_location_state", methods=["GET"])
+def current_location_by_state():
+    """View current location."""
+
+    GOOGLE_MAPS_KEY = os.environ['GOOGLE_MAPS_KEY']
     print('printing session info')
     print(session.items())
     states = crud.get_states()
     print(states)
-    return render_template("current-location.html", GOOGLE_MAPS_KEY=GOOGLE_MAPS_KEY, states=states)
+    states = [state for state in states if state!= "Дорноговь"]
+    return render_template("current-location-state.html", GOOGLE_MAPS_KEY=GOOGLE_MAPS_KEY, states=states)
 
 @app.route("/create_account", methods=["POST"])
 def create_account():
@@ -186,10 +218,20 @@ def process_logout():
 def list_farms():
     """create user account."""
     username = session['customer']
+    farms = []
     user_id = crud.get_user(username).id
     entry_farms = crud.get_farms_by_user_id(user_id)
-    farms = [crud.get_complete_farm_from_entry(entry_farm.title) for entry_farm in entry_farms]
+    for entry_farm in entry_farms:
+        link = entry_farm.entry
+        farm = crud.get_complete_farm_from_entry(link)
+        farms.append(farm)
     return render_template("bookmarked.html", farms=farms)
+
+@app.route("/about")
+def story():
+    """create user account."""
+
+    return render_template("about.html")
 
 @app.route("/api/bookmarked", methods=["GET"])
 def show_existing_favorites():

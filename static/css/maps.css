@@ -40,8 +40,13 @@ body {
     height: 100%;
   }
 
-  .map, #map {
-    width: 80%;
-    height: 90%;
+  #map {
+    width: 100%;
+    height: 50vh;
+    background-color: #86a7b7;
   }
-  
+
+  #current-title{
+    margin-bottom: 20px;
+    font-weight: bold;
+  }

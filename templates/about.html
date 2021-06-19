@@ -1,17 +1,8 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<link rel="stylesheet" href="/static/css/maps.css" />
-<script src="/static/js/maps.js"></script>
-<script defer src='https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_KEY }}&callback=initMap'>
-</script>
-<script defer src="/static/js/showfarms.js"></script>
-<script src="/static/lib/babel-standalone.js"></script>
-<script src="/static/lib/react.development.js"></script>
-<script src="/static/lib/react-dom.development.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
 {% endblock %}
-
-{% block title %}Find famrs by zip code{% endblock %}
 
 {% block body %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -22,14 +13,7 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="about">About<span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="/">home<span class="sr-only">(current)</span></a>
-      </li>
     </ul>
-
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
@@ -87,45 +71,29 @@
     </div>
 </nav>
 
-<div class="container">
-<div class="row">
-  <div class="col-12 mt-2">
-  <main>
-      <div id="map"></div>
-  </main>
-  </div>
-</div>
+<div class="container-fluid">
 
-<h2 class="mt-5 mb-3">Find a farm using zip code</h2>
-<form id="additonal-location-form" method="POST">
-  <div class="form-group">
-    <div class="container-fluid">
-        Zip Code <input type="text" name="zip_code" id="zip_code_field"> within <input type="text" name="miles"
-          id="miles_field"> miles
+    <div class="row">
+        <div class='col-12'>
+            <h2 class='mt-5 mb-4'>Why I made this website</h2>
+        </div>    
     </div>
-  </div>
 
-  <div class="form-group">
-    <h2 class="mt-5 mb-3">Select month(s) you want to visit</h2>
-    <select multiple class="form-control" type="text" name="months" id="months_field">
-      <option value="1">January</option>
-      <option value="2">February</option>
-      <option value="3">March</option>
-      <option value="4">April</option>
-      <option value="5">May</option>
-      <option value="6">June</option>
-      <option value="7">July</option>
-      <option value="8">August</option>
-      <option value="9">September</option>
-      <option value="10">October</option>
-      <option value="11">November</option>
-      <option value="12">December</option>
-    </select>
-  </div>
+    <div class="row">
+        <div class='col-12'>
+            <soan> 
+                <p>I have always loved being in nature. I find working on farms fulfilling and deeply cherish my connection with the earth. To me, there are not many pleasures
+                higher than digging my hand into dirt and taking care of vegitables and produce. It feels to me like a physical meditation and paying homage to humanity.</p>
 
-  <input type="submit" class="btn btn-light">
-</form>
-
-
+                <p>I was raised bi-culturally in China and in the Bay Area. Working on farms in Montana right after college gave me a glimpse into what living and working in
+                    a non-coastal metropolis feels like. I have made friends with humans and animals alike. I am about to visit the farms I worked on, which was the inspiration
+                    for making this website</p>
+                
+                <p>Many friends of mine have asked how I found farms. Here I hope that you are able to play with the idea of working on farms and staying with host families by using my website.</p>
+            </soan>
+        </div>
+    </div>
 </div>
-{% endblock %}
+
+
+  {% endblock %}
