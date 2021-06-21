@@ -1,6 +1,6 @@
 """Server for movie ratings app."""
 
-from flask import Flask, render_template, request, flash, session, redirect, jsonify
+from flask import Flask, render_template, request, session, redirect, jsonify
 from jinja2.runtime import LoopContext
 from model import connect_to_db
 import json
@@ -17,9 +17,7 @@ from pyzipcode import ZipCodeDatabase
 app = Flask(__name__)
 app.secret_key = "dev"
 app.jinja_env.undefined = StrictUndefined
-# SESSION_COOKIE_HTTPONLY = False
 
-# session.cookie_httponly=on
 
 @app.route("/")
 def homepage():
@@ -31,7 +29,6 @@ def find_farms(zip_code=None, miles=None, state=None, months=None):
 
     zcdb = ZipCodeDatabase()
 
-    # not sure if this solves the problem
     if not miles:
         miles = 10
     if not months:
@@ -146,10 +143,7 @@ def current_location():
     """View current location."""
 
     GOOGLE_MAPS_KEY = os.environ['GOOGLE_MAPS_KEY']
-    # print('printing session info')
-    # print(session.items())
-    # states = crud.get_states()
-    # print(states)
+
     return render_template("current-location.html", GOOGLE_MAPS_KEY=GOOGLE_MAPS_KEY)
 
 @app.route("/current_location_state", methods=["GET"])
@@ -157,10 +151,7 @@ def current_location_by_state():
     """View current location."""
 
     GOOGLE_MAPS_KEY = os.environ['GOOGLE_MAPS_KEY']
-    print('printing session info')
-    print(session.items())
     states = crud.get_states()
-    print(states)
     states = [state for state in states if state!= "Дорноговь"]
     return render_template("current-location-state.html", GOOGLE_MAPS_KEY=GOOGLE_MAPS_KEY, states=states)
 
@@ -203,21 +194,17 @@ def process_login():
     if user.user_name != None:
         if user.password == password:
             session['customer'] = user_name
-            flash("Login successful!")
             return redirect("/")
 
         else:
-            flash("Incorrect password")
             return redirect("/login")
 
     else:
-        flash("No customer with that email found.")
         return redirect("/login")
 
 @app.route("/logout", methods=["GET", "POST"])
 def process_logout():
     session['customer'] = None
-    flash("logged out")
     return redirect("/")
 
 @app.route("/favorite")

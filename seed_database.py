@@ -32,8 +32,6 @@ for farm in farm_data:
     lon = farm['lon']
     link = farm['link']
     title = farm['title']
-    # determine if I want to use the unique identifier from workaway later
-    # farm_id = int(link.split('/')[-1])
     available_months = farm['available_months']
 
     try:
@@ -54,12 +52,9 @@ for farm in farm_data:
 
 
         db_farm = crud.create_farm(lon=lon, lat=lat, state=state, zip_code=zip_code, link=link, title=title)
-        # only need append if I need to create more fake data
-        # farms_in_db.append(db_farm)
+
 
         for available_month in available_months:
             farm_id = int(db_farm.farm_id)
             db_farm_available_month = crud.create_farm_availablity(farm_id, available_month)
-            # only need append if I need to create more fake data
-            # farms_available_months_in_db.append(db_farm_available_month)
 
