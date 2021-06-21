@@ -23,13 +23,13 @@
     margin-top: 0px;
   }
 
-  .page-header {
-      height: 400px;
-      margin-top: 0px;
-      background-size: cover;
-      background-image: url('/static/img/bison_2.jpg');
-      /* filter: blur(0px); */
-      display: grid;
+.page-header {
+    height: 400px;
+    margin-top: 0px;
+    background-size: cover;
+    background-image: url('/static/img/bison_2.jpg');
+    /* filter: blur(0px); */
+    display: grid;
   }
 
 .homepage_background{
@@ -51,7 +51,7 @@
     padding: 100px 40px 0px;
   }
 
-  .homepage_button{
+.homepage_button{
       margin-bottom: 200px;
   }
 
@@ -60,7 +60,7 @@
     border: rgb(247, 247, 249);
   }
 
-  .modal-footer {
+.modal-footer {
     border-top: 0 none;
 }
 

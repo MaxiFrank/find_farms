@@ -87,7 +87,6 @@
     </div>
 </nav>
 
-
 <div class="container">
   <div class="row">
     <div class="col-12 mt-2">
@@ -97,12 +96,12 @@
     </div>
   </div>
   
-  <h2 class="mt-5 mb-3">Find a farm using state</h2>
+  <h2 class="mt-5 mb-3">Find farms using state</h2>
   <form id="additonal-location-form" method="POST">
   <div class="form-group">
     <div class="container-fluid">
       {% for state in states %}
-      <button id="state_field" type="button" class="btn btn-light btn-sm" onclick='captureValue(this)'>{{ state }}</button>
+      <button id="state_field" type="button" class="btn btn-light btn-sm" autocomplete="off" onclick='captureValue(this)'>{{ state }}</button>
       {% endfor %}
     </div>
   </div>

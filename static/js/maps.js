@@ -10,7 +10,8 @@ function moveToLocation(lat, lng, zoom){
 function addBookMark(results) {
   const lat = window.marker.position.lat();
   const lng = window.marker.position.lng();
-  const title = window.marker.title
+  const title = window.marker.getTitle()
+  console.log(title)
   const link = window.marker.link
   window.marker.setMap(null);
   const marker = new google.maps.Marker({

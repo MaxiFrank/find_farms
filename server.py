@@ -164,15 +164,21 @@ def current_location_by_state():
     states = [state for state in states if state!= "Дорноговь"]
     return render_template("current-location-state.html", GOOGLE_MAPS_KEY=GOOGLE_MAPS_KEY, states=states)
 
+@app.route("/create_account", methods=["GET"])
+def create_account_get():
+    """create user account."""
+
+    return render_template("create_account.html")
+
 @app.route("/create_account", methods=["POST"])
-def create_account():
+def create_account_post():
     """create user account."""
     user_name = request.form.get('user_name')
     password = request.form.get('password')
 
     crud.create_user(user_name, password)
 
-    return render_template("create_account.html")
+    return redirect("/")
 
 @app.route("/login", methods=["GET"])
 def show_login():
