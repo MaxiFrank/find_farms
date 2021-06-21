@@ -28,7 +28,6 @@ while next_page:
 
     for link in links_on_page:
         driver.get(link)
-        # content = driver.find_element_by_css_selector('#mapcontainer script:nth-child(5)')
         title = driver.execute_script('return document.querySelector(".nomargin").innerText')
         html_script = driver.execute_script('return document.querySelector("#mapcontainer script:nth-child(5)").innerText')
 
