@@ -1,8 +1,6 @@
 var currentState = ''
 function captureValue(objButton) {
   currentState = objButton.innerText;
-  console.log('click state')
-  console.log(currentState);
 }
 
 function updateFarms(results) {
@@ -22,19 +20,15 @@ function updateFarms(results) {
 }
 
 function showFarms(evt) {
-  console.log('show farm state')
-  console.log(currentState);
   evt.preventDefault();
 
   if (!document.querySelector('#zip_code_field')) {
-    console.log('no zip code')
     var zip_code = undefined; 
   } else {
     var zip_code = document.querySelector('#zip_code_field').value;
   }
     
   if (!document.querySelector('#miles_field')){
-    console.log('no miles')
     var miles = undefined; 
   } else {
     var miles = document.querySelector('#miles_field').value;

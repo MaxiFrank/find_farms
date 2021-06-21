@@ -11,7 +11,6 @@ function addBookMark(results) {
   const lat = window.marker.position.lat();
   const lng = window.marker.position.lng();
   const title = window.marker.getTitle()
-  console.log(title)
   const link = window.marker.link
   window.marker.setMap(null);
   const marker = new google.maps.Marker({
@@ -28,12 +27,6 @@ function addBookMark(results) {
     }
   });
 
-
-  marker.addListener('click', (event) => {
-  console.log(marker);
-
-  });
-
   const markerInfo = (`
   <div id='current-title'>'${title}'</div>
       <p>
@@ -46,7 +39,6 @@ function addBookMark(results) {
                         
   marker.addListener('click', (event) => {
     infoWindow.open(window.map, marker);
-    console.log(marker)
 });
 }
 
@@ -55,10 +47,6 @@ function addFarm() {
   const currentTitle = document.querySelector('#current-title').innerText
   const data = {'current-link':currentLink
                 ,'current-title':currentTitle}
-  console.log('currentLink')
-  console.log(currentLink)
-  console.log('currentTitle')
-  console.log(currentTitle)
 
   $.post("/api/bookmark", data, addBookMark, 'json');
 
@@ -81,7 +69,6 @@ function makeMarker(centerLon, centerLat, lon, lat, link, zoom, title, icon_link
                               }
                             });              
 
-  // if user isn't logged in, I don't want the add to favorites button to exist.
   const markerInfo = (`
     <div id='current-title'>'${marker.title}'</div>
         <p>
@@ -95,7 +82,6 @@ function makeMarker(centerLon, centerLat, lon, lat, link, zoom, title, icon_link
                           
   marker.addListener('click', (event) => {
     infoWindow.open(window.map, marker);
-    console.log(marker)
     window.marker = marker
   });
 
