@@ -15,7 +15,7 @@ Please reference requirements.txt by running the command below in your terminal.
 
 DATA
 
-You will need to create a developer API key at Google Maps Javascript API and save it in your os environment
+You will need to create a developer API key at Google Maps Javascript API and save it in your os environment.
 
 You will also need to install a PostgreSQL connection in the backend to enable data querying.
 
